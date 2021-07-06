@@ -109,4 +109,93 @@ public class TesteDoAvaliador {
         assertEquals(300.0, maiores.get(1).getValor(),0.0001);
         assertEquals(200.0, maiores.get(2).getValor(),0.0001);
     }
+
+    @Test
+    public void deveValidarOMenorEOMaiorLance(){
+        Usuario joao = new Usuario("João");
+        Usuario jose = new Usuario("José");
+        Usuario maria = new Usuario("Maria");
+
+        Leilao leilao = new Leilao("Playstation 5 Novo");
+
+        leilao.propoe(new Lance(joao, 200.00));
+        leilao.propoe(new Lance(jose, 450.00));
+        leilao.propoe(new Lance(maria, 120.00));
+        leilao.propoe(new Lance(joao, 700.00));
+        leilao.propoe(new Lance(jose, 630.00));
+        leilao.propoe(new Lance(maria, 230.00));
+
+        Avaliador leiloeiro = new Avaliador();
+        leiloeiro.avalia(leilao);
+
+        assertEquals(120.00, leiloeiro.getMenorLance(), 0.0001);
+        assertEquals(700.00, leiloeiro.getMaiorLance(), 0.0001);
+    }
+
+    @Test
+    public void deveEntenderLancesEmOrdemDecrescente(){
+        Usuario joao = new Usuario("João");
+        Usuario jose = new Usuario("José");
+        Usuario maria = new Usuario("Maria");
+
+        Leilao leilao = new Leilao("Playstation 5 Novo");
+
+        leilao.propoe(new Lance(joao, 400.00));
+        leilao.propoe(new Lance(jose, 300.00));
+        leilao.propoe(new Lance(maria, 200.00));
+        leilao.propoe(new Lance(maria, 100.00));
+
+        Avaliador leiloeiro = new Avaliador();
+        leiloeiro.avalia(leilao);
+
+        assertEquals(400.00, leiloeiro.getMaiorLance(), 0.00001);
+        assertEquals(100.00, leiloeiro.getMenorLance(), 0.00001);
+    }
+
+    @Test
+    public void deveRetornarTresResultadosParaCincoLances(){
+        Usuario joao = new Usuario("João");
+        Usuario jose = new Usuario("José");
+        Usuario maria = new Usuario("Maria");
+
+        Leilao leilao = new Leilao("Playstation 5 Novo");
+
+        leilao.propoe(new Lance(joao, 400.00));
+        leilao.propoe(new Lance(jose, 300.00));
+        leilao.propoe(new Lance(maria, 200.00));
+        leilao.propoe(new Lance(maria, 100.00));
+        leilao.propoe(new Lance(jose, 600.00));
+        leilao.propoe(new Lance(maria, 800.00));
+
+        Avaliador leiloeiro = new Avaliador();
+        leiloeiro.avalia(leilao);
+
+        List<Lance> maiores = leiloeiro.getTresMaiores();
+
+        assertEquals(3,maiores.size() );
+        assertEquals(800.00, maiores.get(0).getValor(), 0.00001);
+        assertEquals(600.00, maiores.get(1).getValor(), 0.00001);
+        assertEquals(400.00, maiores.get(2).getValor(), 0.00001);
+        }
+
+        @Test
+        public void deveRodarFuncaoDosTresMaioresEmApenasDoisLances(){
+
+            Usuario joao = new Usuario("João");
+            Usuario jose = new Usuario("José");
+            Usuario maria = new Usuario("Maria");
+
+            Leilao leilao = new Leilao("Playstation 5 Novo");
+
+            leilao.propoe(new Lance(joao, 400.00));
+            leilao.propoe(new Lance(jose, 300.00));
+
+            Avaliador leiloeiro = new Avaliador();
+            leiloeiro.avalia(leilao);
+
+            List<Lance> maiores = leiloeiro.getTresMaiores();
+            assertEquals(2, maiores.size());
+            assertEquals(400.00, maiores.get(0).getValor(), 0.0001);
+            assertEquals(300.00, maiores.get(1).getValor(), 0.0001);
+        }
 }
